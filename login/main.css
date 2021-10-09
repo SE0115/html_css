@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap');
 
-* {
+body * {
     font-family: 'Nanum Myeongjo', serif;
 }
 form {
@@ -21,7 +21,7 @@ input {
     padding: 10px;
     border: 1px solid #797979;
     font-size: 20px;
-    margin-left: 20px;
+    margin: 0 20px;
     border-radius: 3px;
 }
 span {
