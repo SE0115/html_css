@@ -13,7 +13,8 @@ login.onclick = () => {
         if(input[0].value === sessionStorage.getItem('username') 
             && input[1].value === sessionStorage.getItem('password')) {
                 // form.onsubmit = () => {return true};
-                alert('로그인 성공!');
+                // alert('로그인 성공!');
+                location.href = 'hello.html';
         }
         else {
             if(input[0].value !== sessionStorage.getItem('username')){
