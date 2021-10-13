@@ -37,12 +37,45 @@ const store: Store = {
     feeds: [],
 };
 
-function getData<AjaxResponse>(url: string): AjaxResponse {
-    ajax.open('GET', url, false); // 동기적으로 처리하겠다.
-    ajax.send(); // 데이터 가져오기
+function applyApiMixins(targetClass: any, baseClasses: any[]): void {
+    baseClasses.forEach(baseClass => {
+        Object.getOwnPropertyNames(baseClass.prototype).forEach(name => {
+            const descriptor = Object.getOwnPropertyDescriptor(baseClass.prototype, name);
 
-    return JSON.parse(ajax.response); // 응답 값으로 받은 json 문자열을 객체화하여 리턴해 준다.
+            if(descriptor) {
+                Object.defineProperty(targetClass.prototype, name, descriptor);
+            }
+        });
+    });
 }
+
+class Api {
+    getRequest<AjaxResponse>(url: string): AjaxResponse {
+        const ajax = new XMLHttpRequest();
+        ajax.open('GEt', url, false); // 동기적으로 처리하겠다.
+        ajax.send(); // 데이터 가져오기
+
+        return JSON.parse(ajax.response); // 응답 값으로 받은 json 문자열을 객체화하여 리턴해 준다.
+    }
+}
+
+class NewsFeedApi{
+    getData(): NewsFeed[] {
+       return this.getRequest<NewsFeed[]>(news_url);
+    }
+}
+
+class NewsDetailApi{
+    getData(id: string): NewsDetail {
+        return this.getRequest<NewsDetail>(content_url.replace('@id',id));
+    }
+}
+
+interface NewsFeedApi extends Api {};
+interface NewsDetailApi extends Api {};
+
+applyApiMixins(NewsFeedApi, [Api]);
+applyApiMixins(NewsDetailApi, [Api]);
 
 function makeFeeds(feeds: NewsFeed[]): NewsFeed[] {
     for(let i=0; i<feeds.length; i++) {
@@ -61,6 +94,7 @@ function updateView(html: string): void { // 타입가드 코드
 }
 
 function newsFeed(): void {
+    const api = new NewsFeedApi();
     let newsFeed: NewsFeed[] = store.feeds;
     const newsList = [];
     let template = `
@@ -87,7 +121,7 @@ function newsFeed(): void {
     `;
 
     if(newsFeed.length === 0) {
-        newsFeed = store.feeds = makeFeeds(getData<NewsFeed[]>(news_url));
+        newsFeed = store.feeds = makeFeeds(api.getData());
     }
     
     for(let i=(store.currentPage - 1)*10; i < (store.currentPage * 10); i++) {
@@ -121,8 +155,8 @@ function newsFeed(): void {
 
 function newsDetail(): void {
     const id = location.hash.substring(7);
-
-    const newsContent = getData<NewsDetail>(content_url.replace('@id',id));
+    const api = new NewsDetailApi();
+    const newsContent = api.getData(id);
     let template = `
         <div class="bg-gray-600 min-h-screen pb-8">
             <div class="bg-white text-xl">
