@@ -33,16 +33,20 @@ login.onclick = () => {
     }
     else {
         if(input[0].value === ""){
-            input[0].nextElementSibling.textContent = "아이디를 입력하세요 :-)";
+            input[0].previousElementSibling.classList.add('warning');
+            // input[0].nextElementSibling.textContent = "아이디를 입력하세요 :-)";
             setTimeout(() => {
                 input[0].nextElementSibling.textContent="";
-            }, 2000);
+                input[0].previousElementSibling.classList.remove('warning');
+            }, 1500);
         }
         if(input[1].value === ""){
-            input[1].nextElementSibling.textContent = "비밀번호를 입력하세요 :-)";
+            input[1].previousElementSibling.classList.add('warning');
+            // input[1].nextElementSibling.textContent = "비밀번호를 입력하세요 :-)";
             setTimeout(() => {
                 input[1].nextElementSibling.textContent="";
-            }, 2000);
+                input[1].previousElementSibling.classList.remove('warning');
+            }, 1500);
         }
     }
 }

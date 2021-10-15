@@ -16,6 +16,17 @@ label {
     padding: 20px;
     font-size: 25px;
 }
+label.warning {
+    color: red !important;
+    animation: warning .3s ease;
+    animation-iteration-count: 2;
+}
+@keyframes warning {
+    0% { transform: translateX(-8px);}
+    25% { transform: translateX(8px);}
+    50% { transform: translateX(-8px);}
+    75% { transform: translateX(8px);}
+}
 input {
     width: 96%;
     padding: 10px;
@@ -43,3 +54,4 @@ button {
     color: whitesmoke;
     background: linear-gradient(90deg, royalblue, lightgreen);
 }
+
