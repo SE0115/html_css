@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏱clock</title>
+    <style>
+        .date {
+            margin-top: 50px;
+            display: block;
+            text-align: center;
+            font-weight: 700;
+        }
+        .clock {
+            text-align: center;
+        }
+    </style>    
+</head>
+<body>
+    <span class="date"></span>
+    <h1 class="clock"></h1>
+</body>
+<script>
+    window.addEventListener('load', defaultSetting)
+
+    function getTime() {
+        const today = new Date();
+        const nowHour = today.getHours();
+        const nowMinute = today.getMinutes();
+        const nowsecond = today.getSeconds();
+        const nowTime = timeFormat(nowHour, nowMinute, nowsecond)
+
+        document.querySelector('.clock').textContent = nowTime
+    }
+
+    function timeFormat(hour, minute, second) {
+        const getHour = hour < 10 ? '0' + hour : hour;
+        const getMinute = minute < 10 ? '0' + minute : minute;
+        const getSecond = second < 10 ? '0' + second : second;
+        return `${getHour}:${getMinute}:${getSecond}`
+    }
+
+    function defaultSetting() {
+        document.querySelector('.date').textContent = new Date().toISOString().substr(0, 10).replaceAll('-', '. ')
+        getTime();
+        setInterval(getTime, 1000);
+    }
+</script>
+</html>
